@@ -1,9 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import Modal from 'react-modal';
-
-// Set app element for React Modal
-Modal.setAppElement('#root'); // Assuming '#root' is the ID of your root element
+import ModalContent from '../components/Modal.js'; // Adjust the path based on your folder structure
 
 const Demo = () => {
   const [selectedImageFile, setSelectedImageFile] = useState(null);
@@ -11,15 +8,6 @@ const Demo = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
-  // Wrap openModal in useCallback to memoize the function
-  const openModal = useCallback(() => {
-    setModalIsOpen(true);
-  }, []);
-
-  const closeModal = useCallback(() => {
-    setModalIsOpen(false);
-  }, []);
 
   const handleFileChange = async (e) => {
     const image = e.target.files[0];
@@ -37,7 +25,7 @@ const Demo = () => {
         },
       });
       setClassRes(response.data.imageRes);
-      openModal(); // Open the modal when a result is received
+      setModalIsOpen(true); // Open the modal when a result is received
     } catch (error) {
       console.error('Error uploading image:', error);
       setError('Error uploading image. Please try again.');
@@ -45,19 +33,6 @@ const Demo = () => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (classRes !== null) {
-      openModal();
-    }
-  }, [classRes, openModal]);
-
-  // Close the modal if classRes changes to null (assuming you want to close it on no result)
-  useEffect(() => {
-    if (classRes === null) {
-      closeModal();
-    }
-  }, [classRes, closeModal]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
@@ -78,15 +53,7 @@ const Demo = () => {
             </label>
             {error && <p className="text-red-500">{error}</p>}
             {/* Render result in modal */}
-            <Modal
-              isOpen={modalIsOpen}
-              onRequestClose={closeModal}
-              contentLabel="Classification Result Modal"
-            >
-              {/* You can render the result directly from classRes */}
-              {classRes !== null && <p>{`Result ${classRes}`}</p>}
-              <button onClick={closeModal}>Close</button>
-            </Modal>
+            {modalIsOpen && <ModalContent setOpenModal={setModalIsOpen} classRes={classRes} />}
           </>
         )}
       </div>

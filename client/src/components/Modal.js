@@ -1,24 +1,23 @@
 import React from "react";
-import '../index.css';
 
-function Modal({ setOpenModal, classRes }) {
+function ModalContent({ setOpenModal, classRes }) {
   const renderContent = () => {
-    switch (classRes) {
-      case 1:
+    console.log(typeof classRes, classRes)
+    switch (classRes.trim()) {
+      case '1':
         return (
           <>
             <h1 className="text-2xl font-bold mb-4">Result 1</h1>
             <p>Description for Result 1</p>
           </>
         );
-      case 2:
+      case '2':
         return (
           <>
             <h1 className="text-6xl font-bold mb-4">Result 2</h1>
             <p>Description for Result 2</p>
           </>
         );
-
       default:
         return (
           <>
@@ -30,8 +29,9 @@ function Modal({ setOpenModal, classRes }) {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="bg-white rounded-md shadow-md p-6 w-96">
+    <div className="fixed inset-0 flex items-center justify-center">
+      <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+      <div className="bg-white rounded-md shadow-md p-6 w-96 z-10"> {/* Add z-10 to ensure it appears above the overlay */}
         <div className="flex justify-end">
           <button
             onClick={() => {
@@ -63,4 +63,4 @@ function Modal({ setOpenModal, classRes }) {
   );
 }
 
-export default Modal;
+export default ModalContent;
