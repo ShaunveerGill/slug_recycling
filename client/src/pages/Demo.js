@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Modal from 'react-modal';
+
+// Set app element for React Modal
+Modal.setAppElement('#root'); // Assuming '#root' is the ID of your root element
 
 const Demo = () => {
   const [selectedImageFile, setSelectedImageFile] = useState(null);
   const [classRes, setClassRes] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const handleFileChange = async (e) => {
     const image = e.target.files[0];
@@ -14,7 +19,7 @@ const Demo = () => {
 
     const formData = new FormData();
     formData.append('image', image);
-  
+
     try {
       setLoading(true);
       const response = await axios.post('http://localhost:3001/processImage', formData, {
@@ -23,6 +28,7 @@ const Demo = () => {
         },
       });
       setClassRes(response.data.imageRes);
+      openModal(); // Open the modal when a result is received
     } catch (error) {
       console.error('Error uploading image:', error);
       setError('Error uploading image. Please try again.');
@@ -30,24 +36,53 @@ const Demo = () => {
       setLoading(false);
     }
   };
+
+  const openModal = () => {
+    if (!modalIsOpen) {
+      setModalIsOpen(true);
+    }
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
+  useEffect(() => {
+    if (classRes !== null) {
+      openModal();
+    }
+  }, [classRes]);
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
-      <div className="mt-4 p-6 bg-white rounded-lg shadow-md w-3/4">
-        <h1 className="text-2xl font-semibold">Demo Page</h1>
-
-        <label htmlFor="fileInput" className="block mt-4 cursor-pointer p-4 rounded-md text-gray-600 hover:bg-gray-100">
-          <input
-            type="file"
-            id="fileInput"
-            className="hidden"
-            onChange={handleFileChange}
-          />
-          Select File
-        </label>
-
-        {loading && <p>Loading...</p>}
-        {error && <p className="text-red-500">{error}</p>}
-        {classRes && <p>Classification Result: {classRes}</p>}
+      <div className="mt-4 p-6 bg-white rounded-lg shadow-md w-11/12">
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <>
+            <h1 className="text-2xl font-semibold">Demo Page</h1>
+            <label htmlFor="fileInput" className="block mt-4 cursor-pointer p-4 rounded-md text-gray-600 hover:bg-gray-100">
+              <input
+                type="file"
+                id="fileInput"
+                className="hidden"
+                onChange={handleFileChange}
+              />
+              {selectedImageFile ? `File Selected: ${selectedImageFile.name}` : 'Select File'}
+            </label>
+            {error && <p className="text-red-500">{error}</p>}
+            {/* Render result in modal */}
+            <Modal
+              isOpen={modalIsOpen}
+              onRequestClose={closeModal}
+              contentLabel="Classification Result Modal"
+            >
+              {/* You can render the result directly from classRes */}
+              {classRes !== null && <p>{`Result ${classRes}`}</p>}
+              <button onClick={closeModal}>Close</button>
+            </Modal>
+          </>
+        )}
       </div>
     </div>
   );
