@@ -1,4 +1,5 @@
 import React from "react";
+import '../index.css';
 
 function Modal({ setOpenModal, classRes }) {
   const renderContent = () => {
@@ -13,11 +14,10 @@ function Modal({ setOpenModal, classRes }) {
       case 2:
         return (
           <>
-            <h1 className="text-2xl font-bold mb-4">Result 2</h1>
+            <h1 className="text-6xl font-bold mb-4">Result 2</h1>
             <p>Description for Result 2</p>
           </>
         );
-      // Add more cases for each classRes value
 
       default:
         return (
@@ -31,8 +31,7 @@ function Modal({ setOpenModal, classRes }) {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="bg-black opacity-50 inset-0 fixed"></div>
-      <div className="relative z-50 bg-white p-6 rounded-md shadow-md">
+      <div className="bg-white rounded-md shadow-md p-6 w-96">
         <div className="flex justify-end">
           <button
             onClick={() => {

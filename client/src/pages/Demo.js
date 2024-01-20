@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Modal from 'react-modal';
 
@@ -11,6 +11,15 @@ const Demo = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  // Wrap openModal in useCallback to memoize the function
+  const openModal = useCallback(() => {
+    setModalIsOpen(true);
+  }, []);
+
+  const closeModal = useCallback(() => {
+    setModalIsOpen(false);
+  }, []);
 
   const handleFileChange = async (e) => {
     const image = e.target.files[0];
@@ -37,21 +46,18 @@ const Demo = () => {
     }
   };
 
-  const openModal = () => {
-    if (!modalIsOpen) {
-      setModalIsOpen(true);
-    }
-  };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
-
   useEffect(() => {
     if (classRes !== null) {
       openModal();
     }
-  }, [classRes]);
+  }, [classRes, openModal]);
+
+  // Close the modal if classRes changes to null (assuming you want to close it on no result)
+  useEffect(() => {
+    if (classRes === null) {
+      closeModal();
+    }
+  }, [classRes, closeModal]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
