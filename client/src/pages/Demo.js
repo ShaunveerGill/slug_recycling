@@ -25,6 +25,7 @@ const Demo = () => {
         },
       });
       setClassRes(response.data.imageRes);
+      console.log(response.data.imageRes);
       setModalIsOpen(true); // Open the modal when a result is received
     } catch (error) {
       console.error('Error uploading image:', error);

@@ -51,6 +51,9 @@ if __name__ == "__main__":
         # load model
         model = tf.keras.models.load_model(MODEL_PATH)
         prediction = model.predict(resize(image_path))
-        result = np.argmax(prediction[0])
+        # accomodate 1 indexing
+        result = np.argmax(prediction[0]) + 1
+        # convert back to 0 indexing to view
+        print(CATEGORIES[result - 1], result - 1)
     except Exception as e:
             print(f"Error: {str(e)}")
