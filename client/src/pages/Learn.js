@@ -3,56 +3,53 @@ import React, { useState } from 'react';
 const Demo = () => {
   const [selectedOption, setSelectedOption] = useState(null);
 
+  const options = [
+    { name: "Option 1", description: "", buttonColor: "bg-blue-500", buttonHoverColor: "hover:bg-blue-600" },
+    { name: "Option 2", description: "", buttonColor: "bg-green-500", buttonHoverColor: "hover:bg-green-600" },
+    { name: "Option 3", description: "", buttonColor: "bg-blue-500", buttonHoverColor: "hover:bg-blue-600" },
+    { name: "Option 4", description: "", buttonColor: "bg-green-500", buttonHoverColor: "hover:bg-green-600" },
+    { name: "Option 5", description: "", buttonColor: "bg-blue-500", buttonHoverColor: "hover:bg-blue-600" },
+    { name: "Option 6", description: "", buttonColor: "bg-green-500", buttonHoverColor: "hover:bg-green-600" },
+  ];
+
   const getContentForOption = () => {
-    switch (selectedOption) {
-      case 0:
-        return (
-          <>
-            <h1 className="text-2xl font-semibold mb-4">Option 1 Content</h1>
-            <p>Description for Option 1</p>
-            <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Custom Button 1</button>
-          </>
-        );
-      case 1:
-        return (
-          <>
-            <h1 className="text-2xl font-semibold mb-4">Option 2 Content</h1>
-            <p>Description for Option 2</p>
-            <a href="https://example.com/button2" target="_blank" rel="noopener noreferrer">
-              <button className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">Custom Button 2</button>
-            </a>
-          </>
-        );
-      // Add more cases for each option...
-      default:
-        return (
-          <p>Please select an option from the navigation bar. Or flip a coin, it's practically the same level of excitement.</p>
-        );
-    }
+    const selected = options[selectedOption];
+
+    return (
+      <>
+        <h1 className="text-3xl font-semibold mb-2">{selected ? selected.name : 'Select an Option'}</h1>
+        <p className="text-lg mb-4">{selected ? selected.description : ''}</p>
+        {selected && selected.buttonColor && (
+          selected.buttonHoverColor ? (
+            <button className={`px-6 py-3 ${selected.buttonColor} text-white rounded-md ${selected.buttonHoverColor}`}>Custom Button</button>
+          ) : (
+            <button className={`px-6 py-3 ${selected.buttonColor} text-white rounded-md`}>Custom Button</button>
+          )
+        )}
+      </>
+    );
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      {/* Combined Box with Drop Shadow */}
-      <div className="bg-white rounded-lg shadow-md p-6 w-3/4 flex">
-        {/* Vertical Navigation Bar */}
+    <div className="flex flex-col bg-blue-100 items-center justify-center min-h-screen">
+     
+      <div className="bg-white rounded-lg shadow-md flex p-10 bg-white h-5/6 w-11/12">
         <div className="w-1/4 p-4">
-          {[...Array(12).keys()].map((option) => (
+          {options.map((option, index) => (
             <div
-              key={option}
+              key={index}
               className={`cursor-pointer p-2 my-1 rounded-md ${
-                selectedOption === option
-                  ? 'bg-black text-white shadow-md'
+                selectedOption === index
+                  ? 'bg-blue-500 text-white shadow-md'
                   : 'hover:bg-gray-300'
               }`}
-              onClick={() => setSelectedOption(option)}
+              onClick={() => setSelectedOption(index)}
             >
-              Option {option + 1}
+              {option.name}
             </div>
           ))}
         </div>
 
-        {/* Right Content */}
         <div className="flex-1 p-6">
           {getContentForOption()}
         </div>
