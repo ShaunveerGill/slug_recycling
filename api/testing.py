@@ -3,8 +3,7 @@ from random import randint
 import time
 
 def test(image_path):
-    #return randint(1, 12)
-    return 2
+    return randint(1, 12)
 
 if __name__ == "__main__":
     try:
