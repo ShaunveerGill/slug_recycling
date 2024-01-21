@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import os
 import cv2
 import random
+from sklearn.model_selection import train_test_split
 
 # adjust size?
 IMG_SIZE = 50
@@ -44,7 +45,15 @@ random.shuffle(training_data)
 X = np.array([item[0] for item in training_data])
 y = np.array([item[1] for item in training_data])
 
-X = X.reshape(-1, IMG_SIZE, IMG_SIZE, 3)
+# normalize..?
+X = X / 255.0
+
+# print(X.shape)
+
+# X = X.reshape(-1, IMG_SIZE, IMG_SIZE, 3)
+X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
 
 np.save("X_train.npy", X)
 np.save("y_train.npy", y)
+np.save("X_val.npy", X_val)
+np.save("y_val.npy", y_val)

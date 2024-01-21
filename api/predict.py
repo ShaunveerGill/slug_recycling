@@ -8,8 +8,8 @@ import sys
 
 
 IMG_SIZE = 50
-MODEL_PATH = 'model_3.h5'
-# FILE_PATH_TEST = "C:/Users/Victor/Documents/sample_images/trash1.jpg"
+MODEL_PATH = 'model_x.h5'
+
 
 CATEGORIES = [
     "battery",
@@ -26,20 +26,21 @@ CATEGORIES = [
     "white-glass"
 ]
 
-def resize(file_path):
-    img_array = cv2.imread(file_path, cv2.IMREAD_COLOR)
-    new_array = cv2.resize(img_array, (IMG_SIZE, IMG_SIZE))
-    return new_array.reshape(-1, IMG_SIZE, IMG_SIZE, 3)
+def test_single_image(model, image_path):
+    # Load the image
+    test_image = cv2.imread(image_path)
+    test_image = cv2.resize(test_image, (IMG_SIZE, IMG_SIZE))
+    test_image = test_image / 255.0
+    test_image = np.expand_dims(test_image, axis=0)
 
-# model = tf.keras.models.load_model("model_3.h5")
+    # Make predictions
+    predictions = model.predict(test_image)
 
-# prediction = model.predict(resize(FILE_PATH_TEST))
-# print(CATEGORIES[np.argmax(prediction[0])])
+    # Interpret predictions
+    predicted_label_index = np.argmax(predictions)
+    # predicted_label = CATEGORIES[predicted_label_index]
 
-# prediction = model.predict([normalized_test_image])
-# print(CATEGORIES[int(np.argmax(prediction, axis=1))])
-# print(CATEGORIES[np.argmax(prediction[0])])
-
+    return predicted_label_index
 
 if __name__ == "__main__":
     try:
@@ -50,9 +51,10 @@ if __name__ == "__main__":
 
         # load model
         model = tf.keras.models.load_model(MODEL_PATH)
-        prediction = model.predict(resize(image_path))
+        # prediction = model.predict(resize(image_path))
+        prediction = test_single_image(model, image_path)
         # accomodate 1 indexing
-        result = np.argmax(prediction[0]) + 1
+        result = prediction + 1
         # convert back to 0 indexing to view
         print(CATEGORIES[result - 1], result - 1)
     except Exception as e:
