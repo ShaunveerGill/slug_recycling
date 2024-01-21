@@ -36,7 +36,7 @@ const Demo = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
-      <div className="mt-4 p-6 bg-white rounded-lg shadow-md w-11/12">
+      <div className="mt-0 p-6 bg-white rounded-lg shadow-md w-11/12"> 
         {loading ? (
           <p>Loading...</p>
         ) : (
