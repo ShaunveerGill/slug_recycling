@@ -34,7 +34,7 @@ def test_single_image(model, image_path):
     test_image = np.expand_dims(test_image, axis=0)
 
     # Make predictions
-    predictions = model.predict(test_image)
+    predictions = model.predict(test_image, verbose = 0)
 
     # Interpret predictions
     predicted_label_index = np.argmax(predictions)
@@ -55,7 +55,9 @@ if __name__ == "__main__":
         prediction = test_single_image(model, image_path)
         # accomodate 1 indexing
         result = prediction + 1
+        # necessary to work..? guess it need to be in stdout
+        print(result)
         # convert back to 0 indexing to view
-        print(CATEGORIES[result - 1], result - 1)
+        # print(CATEGORIES[result - 1], result - 1)
     except Exception as e:
             print(f"Error: {str(e)}")
